@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geocaching - Hod kostkou</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #eef2f3;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; font-size: 24px; }
+        p { color: #7f8c8d; }
+        
+        /* Grafika kostky */
+        #dice {
+            font-size: 90px;
+            margin: 25px auto;
+            width: 120px;
+            height: 120px;
+            line-height: 120px;
+            background: #ffffff;
+            border: 4px solid #34495e;
+            border-radius: 18px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.1), 0 5px 10px rgba(0,0,0,0.1);
+            transition: transform 0.1s;
+        }
+        
+        /* Tlačítko */
+        #btn {
+            padding: 12px 35px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
+            transition: all 0.2s;
+        }
+        #btn:hover { background-color: #2980b9; }
+        #btn:disabled { background-color: #bdc3c7; cursor: not-allowed; box-shadow: none; }
+        
+        /* Textové okno na hlášky a souřadnice */
+        #message-box {
+            margin-top: 30px;
+            padding: 15px;
+            min-height: 50px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            border: 1px dashed #bdc3c7;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .success {
+            background-color: #d4edda !important;
+            border-color: #28a745 !important;
+            color: #155724 !important;
+            font-size: 20px !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Zkus své štěstí! 🎲</h1>
+    <p>Pro získání finálních souřadnic keše musíš hodit číslo 6.</p>
+    
+    <div id="dice">⚀</div>
+    <button id="btn" onclick="rollDice()">Hodit kostkou</button>
+
+    <div id="message-box">Klikni na tlačítko a uvidíš...</div>
+</div>
+
+<script>
+    // Grafické znaky kostky 1 až 6
+    const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+    
+    // Různé hlášky pro neúspěšné hody
+    const trollMessages = [
+        "Škoda! Těsně vedle. Zkus to znovu.",
+        "Nevyšlo to. Kostka tě napíná!",
+        "Už se blížíš, cítím to v kostech!",
+        "Smůla. Ale štěstí v lásce, ne?",
+        "Zase nic. Klikni znovu, ono to padne!",
+        "To bylo blízko! Zkus další hod.",
+        "Kostka říká: DNESKA NE... ale zkusit to můžeš znovu."
+    ];
+    
+    function rollDice() {
+        const btn = document.getElementById('btn');
+        const dice = document.getElementById('dice');
+        const msgBox = document.getElementById('message-box');
+        
+        btn.disabled = true; // Zamkne tlačítko během točení
+        msgBox.innerText = "Kostka se točí...";
+        msgBox.classList.remove("success");
+        
+        let counter = 0;
+        
+        // Animace "roztočení" kostky (střídání čísel)
+        let interval = setInterval(() => {
+            let randomTemp = Math.floor(Math.random() * 6);
+            dice.innerText = diceFaces[randomTemp];
+            
+            // Efekt mírného třesení/rotace kostky během míchání
+            dice.style.transform = "rotate(" + (Math.random() * 20 - 10) + "deg)";
+            
+            counter++;
+            
+            // Po 12 probliknutích se kostka zastaví
+            if (counter > 12) {
+                clearInterval(interval);
+                dice.style.transform = "rotate(0deg)"; // Narovnání kostky
+                
+                // SKUTEČNÝ FINÁLNÍ HOD
+                const finalRoll = Math.floor(Math.random() * 6) + 1;
+                dice.innerText = diceFaces[finalRoll - 1];
+                
+                if (finalRoll === 6) {
+                    // Úspěch - ZDE SI UPRAV SOUŘADNICE PODLE SEBE
+                    msgBox.classList.add("success");
+                    msgBox.innerHTML = "🎉 Skvělé! Padla 6!<br><br>Keš najdeš na:<br>N 50° 05.123 E 014° 25.456";
+                    btn.disabled = false; // Necháme aktivní, kdyby si chtěli hodit znova
+                } else {
+                    // Neúspěch - vybere se náhodná hláška z pole
+                    const randomMsg = trollMessages[Math.floor(Math.random() * trollMessages.length)];
+                    msgBox.innerText = "Padla " + finalRoll + ". " + randomMsg;
+                    btn.disabled = false; // Odemčení tlačítka pro další hod
+                }
+            }
+        }, 80); // Rychlost střídání v milisekundách
+    }
+</script>
+
+</body>
+</html>
