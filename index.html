@@ -94,13 +94,11 @@
     
     // Různé hlášky pro neúspěšné hody
     const trollMessages = [
-        "Škoda! Těsně vedle. Zkus to znovu.",
-        "Nevyšlo to. Kostka tě napíná!",
-        "Už se blížíš, cítím to v kostech!",
-        "Smůla. Ale štěstí v lásce, ne?",
-        "Zase nic. Klikni znovu, ono to padne!",
-        "To bylo blízko! Zkus další hod.",
-        "Kostka říká: DNESKA NE... ale zkusit to můžeš znovu."
+        "Mimo toleranci GPS :)",
+        "Ještě Ti k cíli kousek chybí :)",
+        "Je to vyšší obtížnost :)",
+        "BF to asi tady nepůjde :)",
+        "Ownerovi dnes nevolej :)"
     ];
     
     function rollDice() {
@@ -136,7 +134,7 @@
                 if (finalRoll === 6) {
                     // Úspěch - ZDE SI UPRAV SOUŘADNICE PODLE SEBE
                     msgBox.classList.add("success");
-                    msgBox.innerHTML = "🎉 Skvělé! Padla 6!<br><br>Keš najdeš na:<br>N 50° 05.123 E 014° 25.456";
+                    msgBox.innerHTML = "ŠESTKA!!! Gratulujeme! <br><br>Keš najdeš na:<br>N 50° 10.753' <br>E 14° 38.338'";
                     btn.disabled = false; // Necháme aktivní, kdyby si chtěli hodit znova
                 } else {
                     // Neúspěch - vybere se náhodná hláška z pole
